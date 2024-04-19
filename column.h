@@ -81,6 +81,74 @@ int insererValeur(Colonne *col, int valeur) {
     return 1; // Insertion réussie
 }
 
+// Retourner le nombre d'occurrences d'une valeur x dans la colonne
+int nbOccurrences(const Colonne *col, int x) {
+    if (col == NULL || col->donnees == NULL) {
+        return 0; // Colonne invalide ou vide
+    }
+
+    int occurrences = 0;
+    for (int i = 0; i < col->taille_logique; i++) {
+        if (col->donnees[i] == x) {
+            occurrences++;
+        }
+    }
+    return occurrences;
+}
+
+// Retourner la valeur présente à la position x dans la colonne
+int valeurALaPosition(const Colonne *col, int x) {
+    if (col == NULL || col->donnees == NULL || x < 0 || x >= col->taille_logique) {
+        return -1; // Colonne invalide, vide ou position invalide
+    }
+    return col->donnees[x];
+}
+
+// Retourner le nombre de valeurs supérieures à x dans la colonne
+int nbValeursSuperieures(const Colonne *col, int x) {
+    if (col == NULL || col->donnees == NULL) {
+        return 0; // Colonne invalide ou vide
+    }
+
+    int nbSuperieures = 0;
+    for (int i = 0; i < col->taille_logique; i++) {
+        if (col->donnees[i] > x) {
+            nbSuperieures++;
+        }
+    }
+    return nbSuperieures;
+}
+
+// Retourner le nombre de valeurs inférieures à x dans la colonne
+int nbValeursInferieures(const Colonne *col, int x) {
+    if (col == NULL || col->donnees == NULL) {
+        return 0; // Colonne invalide ou vide
+    }
+
+    int nbInferieures = 0;
+    for (int i = 0; i < col->taille_logique; i++) {
+        if (col->donnees[i] < x) {
+            nbInferieures++;
+        }
+    }
+    return nbInferieures;
+}
+
+// Retourner le nombre de valeurs égales à x dans la colonne
+int nbValeursEgales(const Colonne *col, int x) {
+    if (col == NULL || col->donnees == NULL) {
+        return 0; // Colonne invalide ou vide
+    }
+
+    int nbEgales = 0;
+    for (int i = 0; i < col->taille_logique; i++) {
+        if (col->donnees[i] == x) {
+            nbEgales++;
+        }
+    }
+    return nbEgales;
+}
+
 int main() {
     // Création d'une colonne
     Colonne *maColonne = creerColonne("Ma colonne");
@@ -90,15 +158,14 @@ int main() {
         insererValeur(maColonne, 10);
         insererValeur(maColonne, 20);
         insererValeur(maColonne, 30);
+        insererValeur(maColonne, 20);
+        insererValeur(maColonne, 40);
 
         // Affichage du contenu de la colonne
         afficherColonne(maColonne);
 
-        // Libération de la mémoire allouée pour la colonne
-        libererColonne(maColonne);
-    } else {
-        printf("Erreur lors de la création de la colonne.\n");
-    }
-
-    return 0;
-}
+        // Exemples d'utilisation des nouvelles fonctions
+        printf("Occurrences de la valeur 20 : %d\n", nbOccurrences(maColonne, 20));
+        printf("Valeur à la position 2 : %d\n", valeurALaPosition(maColonne, 2));
+        printf("Nombre de valeurs supérieures à 20 : %d\n", nbValeursSuperieures(maColonne, 20));
+        printf("Nombre de valeurs inférieures à 20 : %)}}
