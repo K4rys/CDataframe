@@ -168,4 +168,5 @@ int main() {
         printf("Occurrences de la valeur 20 : %d\n", nbOccurrences(maColonne, 20));
         printf("Valeur à la position 2 : %d\n", valeurALaPosition(maColonne, 2));
         printf("Nombre de valeurs supérieures à 20 : %d\n", nbValeursSuperieures(maColonne, 20));
-        printf("Nombre de valeurs inférieures à 20 : %)}}
+        printf("Nombre de valeurs inférieures à 20 : %")
+        }}
