@@ -9,23 +9,18 @@
 #include <locale.h>
 
 int main() {
+    COLUMN *mycol = create_column(CHAR, "Column 1");
+    char a = 'A', c = 'C';
 
-    COLUMN *maCOLUMN = create_COLUMN("Ma COLUMN");
-    setlocale(LC_CTYPE,"");
-    if (maCOLUMN != NULL) {
-        insererValeur(maCOLUMN, 10);
-        insererValeur(maCOLUMN, 20);
-        insererValeur(maCOLUMN, 30);
-        insererValeur(maCOLUMN, 20);
-        insererValeur(maCOLUMN, 40);
+    insert_value(mycol, &a);
 
-        print_col(maCOLUMN);
+    insert_value(mycol, NULL);
 
-        printf("Occurrences de la valeur 20 : %d\n", nbOccurrences(maCOLUMN, 20));
-        printf("Valeur à la position 2 : %d\n", valeurALaPosition(maCOLUMN, 2));
-        printf("Nombre de valeurs supérieures à 20 : %d\n", nbValeursSuperieures(maCOLUMN, 20));
-        printf("Nombre de valeurs inférieures à 20 : %d", nbValeursInferieures(maCOLUMN,20));
-    }
+    insert_value(mycol, &c);
+
+    print_col(mycol);
+
+
 
     return 0;
 }

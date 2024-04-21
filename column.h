@@ -1,30 +1,43 @@
 //
-// Created by natha on 20/04/2024.
+// Created by natha on 21/04/2024.
 //
 
-#ifndef CDATAFRAME_COLUMN_H
-#define CDATAFRAME_COLUMN_H
+#ifndef CDATAFRAME_COLUMNV2_H
+#define CDATAFRAME_COLUMNV2_H
 
 #define REALOC_SIZE 256
 
-typedef struct {
-    char *titre;
-    int taille_physique;
-    int taille_logique;
-    int *donnees;
+enum enum_type
+{
+    NULLVAL = 1 , UINT, INT, CHAR, FLOAT, DOUBLE, STRING, STRUCTURE
+};
+typedef enum enum_type ENUM_TYPE;
 
-} COLUMN;
+union column_type{
+    unsigned int uint_value;
+    signed int int_value;
+    char char_value;
+    float float_value;
+    double double_value;
+    char* string_value;
+    void* struct_value;
+};
+typedef union column_type COL_TYPE ;
 
-COLUMN *create_COLUMN(char* title);
-int insererValeur(COLUMN *col, int value);
-void delete_COLUMN(COLUMN **col);
+struct column {
+    char *title;
+    unsigned int size;
+    unsigned int max_size;
+    ENUM_TYPE column_type;
+    COL_TYPE **data; // array of pointers to stored data
+    unsigned long long int *index; // array of integers
+};
+typedef struct column COLUMN;
+
+COLUMN *create_column(ENUM_TYPE type, char *title);
+int insert_value(COLUMN *col, void *value);
+void delete_column(COLUMN **col);
+void convert_value(COLUMN *col, unsigned long long int i, char *str, int size);
 void print_col(COLUMN* col);
-int nbOccurrences(COLUMN *col, int x);
-int valeurALaPosition(const COLUMN *col, int x);
-int nbValeursSuperieures(const COLUMN *col, int x);
-int nbValeursInferieures(const COLUMN *col, int x);
-int nbValeursEgales(const COLUMN *col, int x);
 
-
-
-#endif //CDATAFRAME_COLUMN_H
+#endif //CDATAFRAME_COLUMNV2_H

@@ -1,18 +1,19 @@
 //
-// Created by natha on 20/04/2024.
+// Created by natha on 21/04/2024.
 //
 
 #include "column.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <locale.h>
 
-
-
-
-// Fonction pour créer une colonne vide
-COLUMN* create_COLUMN(char *title) {
+/**
+* Create a new column
+* @param1 : Column type
+* @param2 : Column title
+* @return : Pointer to the created column
+*/
+COLUMN *create_column(ENUM_TYPE type, char *title){
 
     COLUMN *col = malloc(sizeof(COLUMN));
 
@@ -21,144 +22,231 @@ COLUMN* create_COLUMN(char *title) {
         return NULL;
     }
 
-    col->titre = title;
-    col->donnees = NULL;
-    col->taille_physique = 0;
-    col->taille_logique = 0;
+    col->title = title;
+    col->size = 0;
+    col->max_size = 0;
+    col->column_type = type;
+    col->data = NULL;
+    col->index = NULL;
 
     return col;
 }
 
-// Fonction pour insérer une valeur dans une COLUMN
-int insererValeur(COLUMN *col, int value) {
+/**
+* @brief: Insert a new value into a column
+* @param1: Pointer to the column
+* @param2: Pointer to the value to insert
+* @return: 1 if the value is correctly inserted 0 otherwise
+*/
+int insert_value(COLUMN *col, void *value) {
 
     if (col == NULL) {
         printf("Colonne invalide.\n");
         return 0;
     }
 
-    if (col->taille_physique == 0){
-        col->donnees = (int*) malloc(REALOC_SIZE*sizeof(int));
-    }
 
-    if (col->taille_logique >= col->taille_physique) {
-        col->taille_physique += REALOC_SIZE;
-        col->donnees = realloc(col->donnees, col->taille_physique * sizeof(int));
+    if (col->size >= col->max_size) {
 
-        if (col->donnees == NULL) {
+        if (col->max_size == 0) {
+            col->data = malloc(REALOC_SIZE * sizeof(int));
+            col->max_size = 256;
+        } else {
+            col->max_size += REALOC_SIZE;
+            col->data = realloc(col->data, col->max_size * sizeof(int));
+        }
+
+
+        if (col->data == NULL) {
+            printf("Échec de l'allocation mémoire.\n");
             return 0;
         }
     }
 
-    col->donnees[col->taille_logique++] = value;
 
+    switch(col->column_type) {
+        case INT: {
+            if (value!=NULL){
+                col->data[col->size] = malloc(sizeof(int));
+                if (col->data[col->size] == NULL) {
+                    printf("Échec de l'allocation mémoire.\n");
+                    return 0;
+                }
+                *((int*)col->data[col->size]) = *((int*)value);
+            }
+            else{
+                col->data[col->size] = NULL;
+            }
+
+            break;
+        }
+        case UINT: {
+            if (value!=NULL){
+                col->data[col->size] = malloc(sizeof(unsigned int));
+                if (col->data[col->size] == NULL) {
+                    printf("Échec de l'allocation mémoire.\n");
+                    return 0;
+                }
+                *((unsigned int*)col->data[col->size]) = *((unsigned int*)value);
+            }
+            else{
+                col->data[col->size] = NULL;
+            }
+
+            break;
+        }
+        case CHAR: {
+
+            if (value!=NULL){
+                col->data[col->size] = malloc(sizeof(char));
+                if (col->data[col->size] == NULL) {
+                    printf("Échec de l'allocation mémoire.\n");
+                    return 0;
+                }
+                *((char*)col->data[col->size]) = *((char*)value);
+            }
+            else{
+                col->data[col->size] = NULL;
+            }
+
+            break;
+        }
+        case FLOAT: {
+            if (value!=NULL){
+                col->data[col->size] = malloc(sizeof(float));
+                if (col->data[col->size] == NULL) {
+                    printf("Échec de l'allocation mémoire.\n");
+                    return 0;
+                }
+                *((float*)col->data[col->size]) = *((float*)value);
+            }
+            else{
+                col->data[col->size] = NULL;
+            }
+
+            break;
+        }
+        case DOUBLE: {
+            if (value!=NULL){
+                col->data[col->size] = malloc(sizeof(double));
+                if (col->data[col->size] == NULL) {
+                    printf("Échec de l'allocation mémoire.\n");
+                    return 0;
+                }
+                *((double*)col->data[col->size]) = *((double*)value);
+            }
+            else{
+                col->data[col->size] = NULL;
+            }
+
+            break;
+        }
+        case STRING: {
+            if (value!=NULL) {
+                col->data[col->size] = malloc(strlen((char *) value) + 1);
+                if (col->data[col->size] == NULL) {
+                    printf("Échec de l'allocation mémoire.\n");
+                    return 0;
+                }
+                strcpy((char *) col->data[col->size], (char *) value);
+            }
+            else{
+                col->data[col->size] = NULL;
+            }
+            break;
+
+        }
+
+
+        default:
+            printf("Le format de la colonne est invalide");
+            break;
+    }
+
+    col->size++;
     return 1;
 }
 
-// Fonction pour libérer la mémoire allouée pour une colonnne
-void delete_COLUMN(COLUMN **col) {
+/**
+* @brief: Free the space allocated by a column
+* @param1: Pointer to the column
+*/
+void delete_column(COLUMN **col){
 
     if (*col == NULL) {
         printf("Colonne invalide.\n");
         return;
     }
 
-    free((*col)->titre);
-    free((*col)->donnees);
+    free((*col)->title);
+    (*col)->title = NULL;
+
+    for(int i = 0; i < (*col)->max_size; i++) {
+        free((*col)->data[i]);
+        (*col)->data[i] = NULL;
+    }
+
+    free((*col)->index);
+    (*col)->index = NULL;
     free((*col));
     *col = NULL;
+
 }
 
-// Fonction pour afficher le contenu d'une COLUMN
-void print_col(COLUMN* col){
-
-    if (col == NULL) {
-        printf("Colonne invalide.\n");
+/**
+* @brief: Convert a value into a string
+* @param1: Pointer to the column
+* @param2: Position of the value in the data array
+* @param3: The string in which the value will be written
+* @param4: Maximum size of the string
+*/
+void convert_value(COLUMN *col, unsigned long long int i, char *str, int size) {
+    if (col == NULL || i >= col->size) {
+        printf("Colonne invalide ou indice hors limites.\n");
         return;
     }
 
-    for (int i = 0; i < col->taille_logique; i++) {
-        printf("[%d]\t%d\n", i, col->donnees[i]);
+    if (col->data[i] == NULL) {
+        snprintf(str, size, "NULL");
+        return;
+    }
+
+    switch(col->column_type) {
+        case INT:
+            snprintf(str, size, "%d", *((int*)col->data[i]));
+            break;
+        case UINT:
+            snprintf(str, size, "%u", *((unsigned int*)col->data[i]));
+            break;
+        case CHAR:
+            snprintf(str, size, "%c", *((char*)col->data[i]));
+            break;
+        case FLOAT:
+            snprintf(str, size, "%f", *((float*)col->data[i]));
+            break;
+        case DOUBLE:
+            snprintf(str, size, "%lf", *((double*)col->data[i]));
+            break;
+        case STRING:
+            strncpy(str, (char*)col->data[i], size - 1);
+            str[size - 1] = '\0';
+            break;
+
+        default:
+            printf("Type de colonne non pris en charge.\n");
+            break;
     }
 }
 
-// Retourner le nombre d'occurrences d'une valeur x dans la COLUMN
-int nbOccurrences(COLUMN *col, int x) {
+/**
+* @brief: Display the content of a column
+* @param: Pointer to the column to display
+*/
+void print_col(COLUMN* col){
+    char str[255];
+    for (int i = 0; i < col->size; i++) {
 
-    if (col == NULL || col->donnees == NULL) {
-        return -1;
+        convert_value(col, i, str, sizeof(str));
+        printf("[%d] \t %s\n", i, str);
     }
-
-    int occurrences = 0;
-
-    for (int i = 0; i < col->taille_logique; i++) {
-        if (col->donnees[i] == x) {
-            occurrences++;
-        }
-    }
-
-    return occurrences;
 }
-
-// Retourner la valeur présente à la position x dans la COLUMN
-int valeurALaPosition(const COLUMN *col, int x) {
-
-    if (col == NULL || col->donnees == NULL || x < 0 || x >= col->taille_logique) {
-        return -1;
-    }
-
-    return col->donnees[x];
-}
-
-// Retourner le nombre de valeurs supérieures à x dans la COLUMN
-int nbValeursSuperieures(const COLUMN *col, int x) {
-
-    if (col == NULL || col->donnees == NULL) {
-        return -1;
-    }
-
-    int nbSuperieures = 0;
-    for (int i = 0; i < col->taille_logique; i++) {
-        if (col->donnees[i] > x) {
-            nbSuperieures++;
-        }
-    }
-
-    return nbSuperieures;
-}
-
-// Retourner le nombre de valeurs inférieures à x dans la COLUMN
-int nbValeursInferieures(const COLUMN *col, int x) {
-    if (col == NULL || col->donnees == NULL) {
-        return -1;
-    }
-
-    int nbInferieures = 0;
-
-    for (int i = 0; i < col->taille_logique; i++) {
-        if (col->donnees[i] < x) {
-            nbInferieures++;
-        }
-    }
-
-    return nbInferieures;
-}
-
-// Retourner le nombre de valeurs égales à x dans la COLUMN
-int nbValeursEgales(const COLUMN *col, int x) {
-
-    if (col == NULL || col->donnees == NULL) {
-        return -1;
-    }
-
-    int nbEgales = 0;
-    for (int i = 0; i < col->taille_logique; i++) {
-        if (col->donnees[i] == x) {
-            nbEgales++;
-        }
-    }
-
-    return nbEgales;
-}
-
-

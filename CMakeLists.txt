@@ -8,4 +8,5 @@ include_directories(.)
 add_executable(CDataframe
         column.c
         column.h
-        main.c)
+        main.c
+)
