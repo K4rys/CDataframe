@@ -9,4 +9,8 @@ add_executable(CDataframe
         column.c
         column.h
         main.c
+        list.c
+        list.h
+        CDataframe.c
+        CDataframe.h
 )

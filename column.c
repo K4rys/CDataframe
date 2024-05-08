@@ -13,7 +13,7 @@
 * @param2 : Column title
 * @return : Pointer to the created column
 */
-COLUMN *create_column(ENUM_TYPE type, char *title){
+COLUMN *create_column(ENUM_TYPE type, char* title){
 
     COLUMN *col = malloc(sizeof(COLUMN));
 
@@ -243,10 +243,476 @@ void convert_value(COLUMN *col, unsigned long long int i, char *str, int size) {
 * @param: Pointer to the column to display
 */
 void print_col(COLUMN* col){
+
+    if (col == NULL) {
+        printf("Colonne invalide.\n");
+        return;
+    }
+
     char str[255];
     for (int i = 0; i < col->size; i++) {
 
         convert_value(col, i, str, sizeof(str));
         printf("[%d] \t %s\n", i, str);
     }
+}
+
+/**
+ * @brief Return the number of occurrences of a value in a column
+ * @param Pointer to the column to search
+ * @param Pointer to the value to compare
+ * @return number of occurrences of a value in a column
+ */
+int nb_occurence(COLUMN* col, void *value){
+
+    if (col == NULL) {
+        printf("Colonne invalide.\n");
+        return 0;
+    }
+
+
+    int compteur = 0;
+
+    switch(col->column_type) {
+        case INT: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(int *) col->data[i]) == (*(int *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+
+            break;
+        }
+        case UINT: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(unsigned int *) col->data[i]) == (*(unsigned int *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case CHAR: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(char *) col->data[i]) == (*(char *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+
+        case FLOAT: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(float *) col->data[i]) == (*(float *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(double *) col->data[i]) == (*(double *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case STRING: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if (strcmp((char *) col->data[i], (char *) value) == 0) {
+                            compteur++;
+                        }
+                    }
+                }
+            }
+
+            break;
+
+        }
+
+
+        default: {
+            printf("Le format de la colonne est invalide");
+            break;
+        }
+    }
+
+    return compteur;
+
+}
+
+/**
+ * @brief Return the pointer of the value at the position i
+ * @param Pointer to the column to search
+ * @param Position of the value
+ * @return The pointer of the value at the position i
+ */
+void* get_value(COLUMN* col, int i){
+
+    if (col == NULL) {
+        printf("Colonne invalide.\n");
+        return 0;
+    }
+    if(i>col->size){
+        printf("Position trop grande par rapport à la taille de la colonne\n");
+        return 0;
+    }
+    return col->data[i];
+
+}
+
+/**
+ * @brief Return the number of values in the column greater than a specified value
+ * @param Pointer to the column to search
+ * @param Pointer to the value to compare against
+ * @return The number of values in the column greater than the specified value
+ */
+int nb_value_superior(COLUMN* col, void* value){
+
+    if (col == NULL) {
+        printf("Colonne invalide.\n");
+        return 0;
+    }
+
+
+    int compteur = 0;
+
+    switch(col->column_type) {
+        case INT: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(int *) col->data[i]) > (*(int *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+
+            break;
+        }
+        case UINT: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(unsigned int *) col->data[i]) > (*(unsigned int *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case CHAR: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(char *) col->data[i]) > (*(char *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+
+        case FLOAT: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(float *) col->data[i]) > (*(float *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(double *) col->data[i]) > (*(double *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case STRING: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if (strcmp((char *) col->data[i], (char *) value) > 0) {
+                            compteur++;
+                        }
+                    }
+                }
+            }
+
+            break;
+
+        }
+
+
+        default: {
+            printf("Le format de la colonne est invalide");
+            break;
+        }
+    }
+
+    return compteur;
+
+}
+
+/**
+ * @brief Return the number of values in the column less than a specified value
+ * @param Pointer to the column to search
+ * @param Pointer to the value to compare against
+ * @return The number of values in the column less than the specified value
+ */
+int nb_value_inferior(COLUMN* col, void* value){
+
+    if (col == NULL) {
+        printf("Colonne invalide.\n");
+        return 0;
+    }
+
+
+    int compteur = 0;
+
+    switch(col->column_type) {
+        case INT: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(int *) col->data[i]) < (*(int *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+
+            break;
+        }
+        case UINT: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(unsigned int *) col->data[i]) < (*(unsigned int *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case CHAR: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(char *) col->data[i]) < (*(char *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+
+        case FLOAT: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(float *) col->data[i]) < (*(float *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(double *) col->data[i]) < (*(double *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case STRING: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if (strcmp((char *) col->data[i], (char *) value) < 0) {
+                            compteur++;
+                        }
+                    }
+                }
+            }
+
+            break;
+
+        }
+
+
+        default: {
+            printf("Le format de la colonne est invalide");
+            break;
+        }
+    }
+
+    return compteur;
+
+}
+
+/**
+ * @brief Return the number of a value equal to the value given
+ * @param Pointer to the column to search
+ * @param Pointer to the value to compare
+ * @return the number of a value equal to the value given
+ */
+int nb_value_equal(COLUMN* col, void *value){
+
+    if (col == NULL) {
+        printf("Colonne invalide.\n");
+        return 0;
+    }
+
+
+    int compteur = 0;
+
+    switch(col->column_type) {
+        case INT: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(int *) col->data[i]) == (*(int *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+
+            break;
+        }
+        case UINT: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(unsigned int *) col->data[i]) == (*(unsigned int *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case CHAR: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(char *) col->data[i]) == (*(char *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+
+        case FLOAT: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(float *) col->data[i]) == (*(float *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if ((*(double *) col->data[i]) == (*(double *) value)) {
+                            compteur++;
+
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case STRING: {
+            for (int i = 0; i < col->size; i++) {
+                if(value!=NULL) {
+                    if (col->data[i] != NULL) {
+                        if (strcmp((char *) col->data[i], (char *) value) == 0) {
+                            compteur++;
+                        }
+                    }
+                }
+            }
+
+            break;
+
+        }
+
+
+        default: {
+            printf("Le format de la colonne est invalide");
+            break;
+        }
+    }
+
+    return compteur;
+
 }

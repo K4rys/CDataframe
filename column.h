@@ -39,5 +39,10 @@ int insert_value(COLUMN *col, void *value);
 void delete_column(COLUMN **col);
 void convert_value(COLUMN *col, unsigned long long int i, char *str, int size);
 void print_col(COLUMN* col);
+int nb_occurence(COLUMN* col, void *value);
+void* get_value(COLUMN* col, int i);
+int nb_value_superior(COLUMN* col, void* value);
+int nb_value_inferior(COLUMN* col, void* value);
+int nb_value_equal(COLUMN* col, void *value);
 
 #endif //CDATAFRAME_COLUMNV2_H
