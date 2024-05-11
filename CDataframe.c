@@ -476,7 +476,7 @@ void print_column_name(CDATAFRAME *cdf){
 }
 
 
-void nb_col(CDATAFRAME *cdf){
+int nb_col(CDATAFRAME *cdf){
     lnode *current_node = get_first_node(cdf);
     int compteur = 0;
     while (current_node != NULL) {
@@ -484,7 +484,8 @@ void nb_col(CDATAFRAME *cdf){
         compteur++;
         current_node = get_next_node(cdf, current_node);
     }
-    printf("Il y a %d colonnes",compteur);
+    //printf("Il y a %d colonnes",compteur);
+    return compteur;
 
 }
 
@@ -539,8 +540,13 @@ void nb_inferior_to(CDATAFRAME *cdf, void* x){
 
 void replace_value_cdataframe(CDATAFRAME *cdf, void* value, int indice_col, int indice_lig){
     lnode *current_node = get_first_node(cdf);
-    for (int i = 0; i<indice_col-1; i++) {
+    if (indice_col>nb_col(cdf)){
+        printf("Indice colonne : %d nb col : %d\n",indice_col, nb_col(cdf));
+        return;
+    }
+    for (int i = 1; i<indice_col; i++) {
         current_node = get_next_node(cdf,current_node);
+
     }
     COLUMN *col = current_node->data;
 
@@ -658,21 +664,73 @@ void replace_value_cdataframe(CDATAFRAME *cdf, void* value, int indice_col, int 
 
 }
 
-CDATAFRAME load_from_csv(char* name, ENUM_TYPE *cdftype, int size){
-    FILE* fic ;
+CDATAFRAME* load_from_csv(char* name, ENUM_TYPE *cdftype, int size) {
+    FILE* file;
     CDATAFRAME *cdf = create_cdataframe(cdftype, size);
+    char line[1000];
+
+    file = fopen(name, "r");
+    if (file == NULL) {
+        printf("Impossible d'ouvrir le fichier.\n");
+        return cdf;
+    }
+    int colonne = 1;
+    int ligne = 1;
+    char str[255];
+
+    while (fgets(line, sizeof(line), file) != NULL) {
+        char *token = strtok(line, ";");
+        colonne = 0;
+        for (int i =0; i<size;i++){
+            colonne++;
+            COLUMN *col = get_first_node(cdf)->data;
+
+            switch(cdftype[colonne-1]) {
+                case INT: {
+                    int current = atoi(token);
+                    void *ptr = &current;
+                    replace_value_cdataframe(cdf, ptr, colonne, ligne);
+                    break;
+                }
+                case UINT: {
+                    unsigned int current = (unsigned int)strtoul(token, NULL, 10);
+                    void *ptr = &current;
+                    replace_value_cdataframe(cdf, ptr, colonne, ligne);
+                    break;
+                }
+                case CHAR: {
+                    char current = token[0]; // Supposant que vous voulez stocker le premier caractère de la chaîne
+                    void *ptr = &current;
+                    replace_value_cdataframe(cdf, ptr, colonne, ligne);
+                    break;
+                }
+                case FLOAT: {
+                    float current = strtof(token, NULL);
+                    void *ptr = &current;
+                    replace_value_cdataframe(cdf, ptr, colonne, ligne);
+                    break;
+                }
+                case DOUBLE: {
+                    double current = atof(token);
+                    void *ptr = &current;
+                    replace_value_cdataframe(cdf, ptr, colonne, ligne);
+                    break;
+                }
+                case STRING: {
+                    replace_value_cdataframe(cdf, token, colonne, ligne);
+                    break;
+                }
+            }
 
 
-    fic = fopen( "fic_data.csv", "rt") ;
-    if (fic==NULL)
-    {
-        printf("Ouverture fichier impossible !");
-        exit(0);
+
+            token = strtok(NULL, ";");
+        }
+        ligne++;
+
     }
 
+    fclose(file);
 
-
-
-    fclose(fic);
-
+    return cdf;
 }

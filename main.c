@@ -19,17 +19,15 @@ int main() {
 
     insert_value(mycol, &c);
 
-    int x = 3;
-    int *ptr = &x;
+    char x = 3;
+    char *ptr = &x;
     ptr = (void*) ptr;
 
+    ENUM_TYPE cdftype [] = {INT,STRING,FLOAT};
 
-    ENUM_TYPE cdftype [] = {INT,INT,INT};
-    CDATAFRAME *cdf = create_cdataframe(cdftype, 3);
-    fill_cdataframe_user(cdf);
-    print_cdataframe(cdf);
-    replace_value_cdataframe(cdf,ptr,1,12);
-    print_cdataframe(cdf);
+
+    print_cdataframe(load_from_csv("\C:\\Users\\natha\\CLionProjects\\CDataframe\\data.csv",cdftype,3));
+
 
 
 
@@ -44,3 +42,10 @@ int main() {
 
 
 const int taille[] = {3, 3};*/
+
+/*ENUM_TYPE cdftype [] = {INT,INT,INT};
+    CDATAFRAME *cdf = create_cdataframe(cdftype, 3);
+    fill_cdataframe_user(cdf);
+    print_cdataframe(cdf);
+    replace_value_cdataframe(cdf,ptr,1,12);
+    print_cdataframe(cdf);*/
