@@ -27,13 +27,13 @@ void rename_col(CDATAFRAME *cdf, int indice);
 void is_in_cdataframe(CDATAFRAME *cdf,void* x);
 void print_column_name(CDATAFRAME *cdf);
 int nb_col(CDATAFRAME *cdf);
-void nb_lig(CDATAFRAME *cdf);
+int nb_lig(CDATAFRAME *cdf);
 void nb_equal_to(CDATAFRAME *cdf, void* x);
 void nb_superior_to(CDATAFRAME *cdf, void* x);
 void nb_inferior_to(CDATAFRAME *cdf, void* x);
 void replace_value_cdataframe(CDATAFRAME *cdf, void* value, int indice_col, int indice_lig);
 CDATAFRAME *load_from_csv(char* name, ENUM_TYPE* cdftype , int size);
-
+void export_cdataframe(char* name, CDATAFRAME* cdf);
 
 
 #endif //CDATAFRAME_CDATAFRAME_H

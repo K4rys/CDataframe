@@ -23,10 +23,12 @@ int main() {
     char *ptr = &x;
     ptr = (void*) ptr;
 
-    ENUM_TYPE cdftype [] = {INT,STRING,FLOAT};
+    ENUM_TYPE cdftype [] = {INT,INT,INT};
+    CDATAFRAME *cdf = create_cdataframe(cdftype, 3);
+    fill_cdataframe_user(cdf);
+    print_cdataframe(cdf);
 
-
-    print_cdataframe(load_from_csv("\C:\\Users\\natha\\CLionProjects\\CDataframe\\data.csv",cdftype,3));
+    export_cdataframe("\C:\\Users\\natha\\CLionProjects\\CDataframe\\export.csv",cdf);
 
 
 

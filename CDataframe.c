@@ -489,7 +489,7 @@ int nb_col(CDATAFRAME *cdf){
 
 }
 
-void nb_lig(CDATAFRAME *cdf){
+int nb_lig(CDATAFRAME *cdf){
     lnode *current_node = get_first_node(cdf);
     int max = 0;
     while (current_node != NULL) {
@@ -499,7 +499,7 @@ void nb_lig(CDATAFRAME *cdf){
         }
         current_node = get_next_node(cdf, current_node);
     }
-    printf("Il y a %d lignes",max);
+    return max;
 
 }
 
@@ -733,4 +733,56 @@ CDATAFRAME* load_from_csv(char* name, ENUM_TYPE *cdftype, int size) {
     fclose(file);
 
     return cdf;
+}
+
+void export_cdataframe(char* name, CDATAFRAME* cdf){
+    FILE* file = NULL;
+
+    file = fopen(name, "w");
+
+    if (file == NULL) {
+        printf("Impossible d'ouvrir le fichier.\n");
+        return;
+    }
+
+
+    char str[255];
+    lnode* current_node = get_first_node(cdf);
+    while (current_node != NULL){
+        COLUMN *col = current_node->data;
+
+        fputs(col->title, file);
+        if(current_node!= get_last_node(cdf)){
+            fputs(";", file);
+        }
+
+        current_node = get_next_node(cdf,current_node);
+    }
+    fputs("\n", file);
+
+
+
+    for(int i = 0; i< nb_lig(cdf); i++){
+
+        lnode* current_node = get_first_node(cdf);
+
+        while (current_node != NULL){
+            COLUMN *col = current_node->data;
+            convert_value(col,i,str,sizeof(str));
+
+            fputs(str, file);
+            if(current_node!= get_last_node(cdf)){
+                fputs(";", file);
+            }
+
+            current_node = get_next_node(cdf,current_node);
+        }
+
+        fputs("\n", file);
+    }
+
+
+
+    fclose(file);
+
 }
