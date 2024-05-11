@@ -19,12 +19,18 @@ int main() {
 
     insert_value(mycol, &c);
 
+    int x = 3;
+    int *ptr = &x;
+    ptr = (void*) ptr;
+
 
     ENUM_TYPE cdftype [] = {INT,INT,INT};
     CDATAFRAME *cdf = create_cdataframe(cdftype, 3);
     fill_cdataframe_user(cdf);
-    printlig_cdataframe(cdf,2,3);
-    printf("Il y a %d colonne(s) !", get_cdataframe_cols_size(cdf));
+    print_cdataframe(cdf);
+    replace_value_cdataframe(cdf,ptr,1,12);
+    print_cdataframe(cdf);
+
 
 
 

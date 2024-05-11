@@ -19,6 +19,20 @@ void fill_cdataframe_user(CDATAFRAME *cdf);
 void print_cdataframe(CDATAFRAME *cdf);
 void printcol_cdataframe(CDATAFRAME *cdf, int debut, int fin);
 void printlig_cdataframe(CDATAFRAME *cdf, int debut, int fin);
+void add_lig(CDATAFRAME *cdf);
+void del_lig(CDATAFRAME *cdf, int indice);
+void add_col(CDATAFRAME *cdf, ENUM_TYPE coltype, int indice);
+void del_col(CDATAFRAME *cdf, int indice);
+void rename_col(CDATAFRAME *cdf, int indice);
+void is_in_cdataframe(CDATAFRAME *cdf,void* x);
+void print_column_name(CDATAFRAME *cdf);
+void nb_col(CDATAFRAME *cdf);
+void nb_lig(CDATAFRAME *cdf);
+void nb_equal_to(CDATAFRAME *cdf, void* x);
+void nb_superior_to(CDATAFRAME *cdf, void* x);
+void nb_inferior_to(CDATAFRAME *cdf, void* x);
+void replace_value_cdataframe(CDATAFRAME *cdf, void* value, int indice_col, int indice_lig);
+CDATAFRAME load_from_csv(char* name, ENUM_TYPE* cdftype , int size);
 
 
 
