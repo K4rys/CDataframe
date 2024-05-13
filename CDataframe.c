@@ -187,7 +187,7 @@ void printcol_cdataframe(CDATAFRAME *cdf, int debut, int fin){
 // @param fin: Indice de la dernière ligne à imprimer
 void printlig_cdataframe(CDATAFRAME *cdf, int debut, int fin) {
     // Parcours du dataframe et impression des valeurs des lignes dans la plage spécifiée
-    lnode *current_node;
+    lnode *current_node = get_first_node(cdf);
     for(int i = debut; i<fin+1; i++){
         printf("ligne %d:\n",i);
         current_node = get_first_node(cdf);
