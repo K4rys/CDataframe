@@ -1,3 +1,11 @@
+
+#include "CDataframe.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+
+
 // Crée un nouveau dataframe en demandant les noms des colonnes à l'utilisateur
 // et en utilisant les types de colonnes spécifiés dans le tableau cdftype.
 // @param cdftype: Tableau des types de colonnes
@@ -71,6 +79,61 @@ int get_cdataframe_cols_size(CDATAFRAME *cdf){
 // @param cdf: Pointeur vers le dataframe
 void fill_cdataframe_user(CDATAFRAME *cdf) {
     lnode *current_node = get_first_node(cdf);
+    
+switch (col->column_type) {
+		case INT: {
+		int value;
+		scanf("%d", &value);
+		int *ptr_value = &value;
+		insert_value(col, (void *) ptr_value);
+		break;
+		}
+		case UINT: {
+		unsigned int value;
+		scanf("%u", &value);
+		unsigned int *ptr_value = &value;
+		insert_value(col, (void *) ptr_value);
+		break;
+		}
+		case CHAR: {
+		char value;
+		scanf("%c", &value);
+		char *ptr_value = &value;
+		insert_value(col, (void *) ptr_value);
+		break;
+		}
+		
+
+		case FLOAT: {
+		float value;
+		scanf("%f", &value);
+		float *ptr_value = &value;
+		insert_value(col, (void *) ptr_value);
+		break;
+		}
+		case DOUBLE: {
+		double value;
+		scanf("%lf", &value);
+		double *ptr_value = &value;
+		insert_value(col, (void *) ptr_value);
+		break;
+		}
+		case STRING: {
+		char value[120000];
+		scanf("%s", value);
+		char *ptr_value = value;
+		insert_value(col, (void *) ptr_value);
+		break;
+		}
+		
+
+		
+
+		default: {
+		printf("Le format de la colonne est invalide");
+		break;
+		}
+		}
 
     while (current_node != NULL) {
         COLUMN *col = current_node->data;
