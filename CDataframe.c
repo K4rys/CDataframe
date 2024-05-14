@@ -560,7 +560,7 @@ int nb_lig(CDATAFRAME *cdf){
     return max;
 
 }
-
+//
 // Compte le nombre de cellules égales à une valeur donnée dans le dataframe.
 // @param cdf: Pointeur vers le dataframe
 // @param x: Valeur à comparer
