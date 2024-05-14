@@ -2,8 +2,7 @@
 
 Description
 -----------
-Ce logiciel est conçu pour créer et manipuler des dataframes en langage C. Un dataframe est une structure de données tabulaire similaire à celles utilisées dans des langages comme R ou Python (pandas).
-
+Ce logiciel est conçu pour créer et manipuler des dataframes en langage C. 
 Liste des Programmes
 ---------------------
 1. create_cdataframe:
