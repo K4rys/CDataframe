@@ -250,3 +250,17 @@ void print_col(COLUMN* col){
         printf("[%d] \t %s\n", i, str);
     }
 }
+
+int nb_occurence(COLUMN* col, void *x){
+    int res=0;
+
+    for(int i = 0; i < col->size; i++){
+        if(*(col->data[i]) == x){
+
+        }
+
+
+    }
+    return res;
+
+}

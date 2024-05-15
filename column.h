@@ -39,5 +39,6 @@ int insert_value(COLUMN *col, void *value);
 void delete_column(COLUMN **col);
 void convert_value(COLUMN *col, unsigned long long int i, char *str, int size);
 void print_col(COLUMN* col);
+int nb_occurence(COLUMN* col, void *x);
 
 #endif //CDATAFRAME_COLUMNV2_H
