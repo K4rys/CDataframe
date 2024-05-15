@@ -3,24 +3,54 @@
 //
 
 #include "column.h"
+#include "CDataframe.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
 
 int main() {
-    COLUMN *mycol = create_column(INT, "Column 1");
-    int a = 8, c = 9;
-    int* ptr =&a;
+    COLUMN *mycol = create_column(CHAR, "Column 1");
+    char a = 'A', c = 'C';
+
     insert_value(mycol, &a);
+
+    insert_value(mycol, NULL);
 
     insert_value(mycol, &c);
 
-    nb_occurence(mycol,7);
 
-    print_col(mycol);
+
 
 
 
     return 0;
 }
+
+
+/*char x = 3;
+    char *ptr = &x;
+    ptr = (void*) ptr;
+
+    ENUM_TYPE cdftype [] = {INT,INT,INT};
+    CDATAFRAME *cdf = create_cdataframe(cdftype, 3);
+    fill_cdataframe_user(cdf);
+    print_cdataframe(cdf);
+
+    export_cdataframe("\C:\\Users\\natha\\CLionProjects\\CDataframe\\export.csv",cdf);
+    */
+
+/*void *data[] = {
+        (int []) {1, 2, 3},
+        (char *[]) {"John", "Doe", "30"}
+};
+
+
+const int taille[] = {3, 3};*/
+
+/*ENUM_TYPE cdftype [] = {INT,INT,INT};
+    CDATAFRAME *cdf = create_cdataframe(cdftype, 3);
+    fill_cdataframe_user(cdf);
+    print_cdataframe(cdf);
+    replace_value_cdataframe(cdf,ptr,1,12);
+    print_cdataframe(cdf);*/
