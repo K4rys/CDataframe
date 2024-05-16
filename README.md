@@ -3,6 +3,14 @@
 Description
 -----------
 Ce logiciel est conçu pour créer et manipuler des dataframes en langage C. 
+Nous avons fait les choix suivants :
+                                    Partie 1 : Dur 
+                                    Partie 2 : Dur
+                                    Partie 3 : Facile
+Pour la partie 3 nous avons fait la section 8. "Fichier" et même si elle n'est pas incluse dans la partie 3 "Facile" 
+nous avons juger bon de le mettre quand même.
+Notre projet fonctionne correctement pour toute les fonctions avec les cas passants cependant il est suceptible de 
+disfonctionner si jamais les valeurs entrées ne correspondent pas aux valeurs attendues.
 
 Liste des Programmes
 ---------------------
