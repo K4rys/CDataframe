@@ -75,6 +75,26 @@ Scénario d'utilisations
     int taille_tab[] = {3,3};
     fill_cdataframe_hard(cdf, tab, taille_tab, 2);
 ```
+**export_cdataframe**
+```
+    ENUM_TYPE cdftype [] = {STRING,DOUBLE};
+    CDATAFRAME *cdf = create_cdataframe(cdftype, 2);
+    char* int_arr[] = {"Test", "2", "3"};
+    double double_arr[] = {1.1, 2.2};
 
+    void *tab[] = {int_arr, double_arr};
+    int taille_tab[] = {3,2};
+
+    fill_cdataframe_hard(cdf, tab, taille_tab, 2);
+    char* name = "C:\\Users\\natha\\CLionProjects\\CDataframe\\export.csv";
+    export_cdataframe(name,cdf);
+```
+
+**load_from_csv
+```
+    ENUM_TYPE type[] = {STRING,DOUBLE};
+    char* name = "C:\\Users\\natha\\CLionProjects\\CDataframe\\export.csv";
+    CDATAFRAME *cdf = load_from_csv(name,  type, 2);
+```
 
 
