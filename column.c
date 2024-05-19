@@ -28,7 +28,7 @@ COLUMN *create_column(ENUM_TYPE type, char* title){
     col->column_type = type;
     col->data = NULL;
     col->index = NULL;
-    col->index = malloc(REALOC_SIZE*sizeof(int));
+
 
     return col;
 }
@@ -48,14 +48,15 @@ int insert_value(COLUMN *col, void *value) {
 
 
     if (col->size >= col->max_size) {
-
+        //Si on n'a pas encore alloué de mémoire pour cette colonne
         if (col->max_size == 0) {
             col->data = malloc(REALOC_SIZE * sizeof(int));
             col->max_size = 256;
+            //Si on a déjà alloué de la mémoire pour cette colonne mais qu'on veut en rajouter
         } else {
             col->max_size += REALOC_SIZE;
             col->data = realloc(col->data, col->max_size * sizeof(int));
-            col->index = realloc(col->index,col->max_size*sizeof(int));
+
         }
 
 
@@ -69,34 +70,39 @@ int insert_value(COLUMN *col, void *value) {
     switch(col->column_type) {
         case INT: {
             if (value!=NULL){
+                //On alloue dynamiquement de la mémoire pour la case
                 col->data[col->size] = malloc(sizeof(int));
                 if (col->data[col->size] == NULL) {
                     printf("Échec de l'allocation mémoire.\n");
                     return 0;
                 }
+                //Puis on caste et déréférence le pointeur de la case pour lui associer la valeur
                 *((int*)col->data[col->size]) = *((int*)value);
-                col->index[col->size] = col->size;
+
             }
             else{
                 col->data[col->size] = NULL;
-                col->index[col->size] = col->size;
+
             }
 
             break;
         }
         case UINT: {
             if (value!=NULL){
+                //On alloue dynamiquement de la mémoire pour la case
                 col->data[col->size] = malloc(sizeof(unsigned int));
                 if (col->data[col->size] == NULL) {
                     printf("Échec de l'allocation mémoire.\n");
                     return 0;
                 }
+                //Puis on caste et déréférence le pointeur de la case pour lui associer la valeur
+
                 *((unsigned int*)col->data[col->size]) = *((unsigned int*)value);
-                col->index[col->size] = col->size;
+
             }
             else{
                 col->data[col->size] = NULL;
-                col->index[col->size] = col->size;
+
             }
 
             break;
@@ -104,68 +110,82 @@ int insert_value(COLUMN *col, void *value) {
         case CHAR: {
 
             if (value!=NULL){
+                //On alloue dynamiquement de la mémoire pour la case
+
                 col->data[col->size] = malloc(sizeof(char));
                 if (col->data[col->size] == NULL) {
                     printf("Échec de l'allocation mémoire.\n");
                     return 0;
                 }
+                //Puis on caste et déréférence le pointeur de la case pour lui associer la valeur
+
                 *((char*)col->data[col->size]) = *((char*)value);
-                col->index[col->size] = col->size;
+
             }
             else{
                 col->data[col->size] = NULL;
-                col->index[col->size] = col->size;
+
             }
 
             break;
         }
         case FLOAT: {
             if (value!=NULL){
+                //On alloue dynamiquement de la mémoire pour la case
+
                 col->data[col->size] = malloc(sizeof(float));
                 if (col->data[col->size] == NULL) {
                     printf("Échec de l'allocation mémoire.\n");
                     return 0;
                 }
+                //Puis on caste et déréférence le pointeur de la case pour lui associer la valeur
+
                 *((float*)col->data[col->size]) = *((float*)value);
-                col->index[col->size] = col->size;
+
             }
             else{
                 col->data[col->size] = NULL;
-                col->index[col->size] = col->size;
+
             }
 
             break;
         }
         case DOUBLE: {
             if (value!=NULL){
+                //On alloue dynamiquement de la mémoire pour la case
+
                 col->data[col->size] = malloc(sizeof(double));
                 if (col->data[col->size] == NULL) {
                     printf("Échec de l'allocation mémoire.\n");
                     return 0;
                 }
+                //Puis on caste et déréférence le pointeur de la case pour lui associer la valeur
+
                 *((double*)col->data[col->size]) = *((double*)value);
-                col->index[col->size] = col->size;
+
             }
             else{
                 col->data[col->size] = NULL;
-                col->index[col->size] = col->size;
+
             }
 
             break;
         }
         case STRING: {
             if (value!=NULL) {
+                //On alloue dynamiquement de la mémoire pour la case
+
                 col->data[col->size] = malloc(strlen((char *) value) + 1);
                 if (col->data[col->size] == NULL) {
                     printf("Échec de l'allocation mémoire.\n");
                     return 0;
                 }
                 strcpy((char *) col->data[col->size], (char *) value);
-                col->index[col->size] = col->size;
+
             }
             else{
                 col->data[col->size] = NULL;
-                col->index[col->size] = col->size;
+
             }
             break;
 
@@ -177,7 +197,7 @@ int insert_value(COLUMN *col, void *value) {
             break;
     }
 
-    col->size++;
+    col->size++; //on incrémente la taille de notre colonne
     return 1;
 }
 
@@ -195,15 +215,16 @@ void delete_column(COLUMN **col){
     free((*col)->title);
     (*col)->title = NULL;
 
-    for(int i = 0; i < (*col)->max_size; i++) {
+    //On parcout la colonne et on libère la mémoire de chaques cases
+    for(int i = 0; i < (*col)->size; i++) {
         free((*col)->data[i]);
         (*col)->data[i] = NULL;
     }
-
     free((*col)->index);
     (*col)->index = NULL;
     free((*col));
     *col = NULL;
+
 
 }
 
@@ -213,38 +234,46 @@ void delete_column(COLUMN **col){
 * @param2: Position of the value in the data array
 * @param3: The string in which the value will be written
 * @param4: Maximum size of the string
+* return: 1 if it was executed correctly -1 otherwise
 */
-void convert_value(COLUMN *col, unsigned long long int i, char *str, int size) {
+int convert_value(COLUMN *col, unsigned long long int i, char *str, int size) {
+    //On verifie que l'indice n'est pas trop grand et que la colonne n'est pas nul
     if (col == NULL || i >= col->size) {
-        printf("Colonne invalide ou indice hors limites.\n");
-        return;
+
+        return -1;
     }
 
     if (col->data[i] == NULL) {
         snprintf(str, size, "NULL");
-        return;
+        return 1;
     }
 
     switch(col->column_type) {
         case INT:
             snprintf(str, size, "%d", *((int*)col->data[i]));
             break;
+            return 1;
         case UINT:
             snprintf(str, size, "%u", *((unsigned int*)col->data[i]));
             break;
+            return 1;
         case CHAR:
             snprintf(str, size, "%c", *((char*)col->data[i]));
             break;
+            return 1;
         case FLOAT:
             snprintf(str, size, "%f", *((float*)col->data[i]));
             break;
+            return 1;
         case DOUBLE:
             snprintf(str, size, "%lf", *((double*)col->data[i]));
             break;
+            return 1;
         case STRING:
             strncpy(str, (char*)col->data[i], size - 1);
             str[size - 1] = '\0';
             break;
+            return 1;
 
         default:
             printf("Type de colonne non pris en charge.\n");
@@ -291,8 +320,11 @@ int nb_occurence(COLUMN* col, void *value){
         case INT: {
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
+
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case correspond à la valeur recherchée alors
                         if ((*(int *) col->data[i]) == (*(int *) value)) {
+
                             compteur++;
 
                         }
@@ -306,6 +338,7 @@ int nb_occurence(COLUMN* col, void *value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case correspond à la valeur recherchée alors
                         if ((*(unsigned int *) col->data[i]) == (*(unsigned int *) value)) {
                             compteur++;
 
@@ -319,6 +352,7 @@ int nb_occurence(COLUMN* col, void *value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case correspond à la valeur recherchée alors
                         if ((*(char *) col->data[i]) == (*(char *) value)) {
                             compteur++;
 
@@ -333,6 +367,7 @@ int nb_occurence(COLUMN* col, void *value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case correspond à la valeur recherchée alors
                         if ((*(float *) col->data[i]) == (*(float *) value)) {
                             compteur++;
 
@@ -346,6 +381,7 @@ int nb_occurence(COLUMN* col, void *value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case correspond à la valeur recherchée alors
                         if ((*(double *) col->data[i]) == (*(double *) value)) {
                             compteur++;
 
@@ -359,6 +395,7 @@ int nb_occurence(COLUMN* col, void *value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case correspond à la valeur recherchée alors
                         if (strcmp((char *) col->data[i], (char *) value) == 0) {
                             compteur++;
                         }
@@ -422,6 +459,7 @@ int nb_value_superior(COLUMN* col, void* value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est supérieure à la valeur recherchée alors
                         if ((*(int *) col->data[i]) > (*(int *) value)) {
                             compteur++;
 
@@ -436,6 +474,7 @@ int nb_value_superior(COLUMN* col, void* value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est supérieure à la valeur recherchée alors
                         if ((*(unsigned int *) col->data[i]) > (*(unsigned int *) value)) {
                             compteur++;
 
@@ -449,6 +488,7 @@ int nb_value_superior(COLUMN* col, void* value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est supérieure à la valeur recherchée alors
                         if ((*(char *) col->data[i]) > (*(char *) value)) {
                             compteur++;
 
@@ -463,6 +503,7 @@ int nb_value_superior(COLUMN* col, void* value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est supérieure à la valeur recherchée alors
                         if ((*(float *) col->data[i]) > (*(float *) value)) {
                             compteur++;
 
@@ -476,6 +517,7 @@ int nb_value_superior(COLUMN* col, void* value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est supérieure à la valeur recherchée alors
                         if ((*(double *) col->data[i]) > (*(double *) value)) {
                             compteur++;
 
@@ -489,6 +531,7 @@ int nb_value_superior(COLUMN* col, void* value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est supérieure à la valeur recherchée alors
                         if (strcmp((char *) col->data[i], (char *) value) > 0) {
                             compteur++;
                         }
@@ -532,6 +575,7 @@ int nb_value_inferior(COLUMN* col, void* value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est inférieure à la valeur recherchée alors
                         if ((*(int *) col->data[i]) < (*(int *) value)) {
                             compteur++;
 
@@ -546,6 +590,7 @@ int nb_value_inferior(COLUMN* col, void* value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est inférieure à la valeur recherchée alors
                         if ((*(unsigned int *) col->data[i]) < (*(unsigned int *) value)) {
                             compteur++;
 
@@ -559,6 +604,7 @@ int nb_value_inferior(COLUMN* col, void* value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est inférieure à la valeur recherchée alors
                         if ((*(char *) col->data[i]) < (*(char *) value)) {
                             compteur++;
 
@@ -573,6 +619,7 @@ int nb_value_inferior(COLUMN* col, void* value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est inférieure à la valeur recherchée alors
                         if ((*(float *) col->data[i]) < (*(float *) value)) {
                             compteur++;
 
@@ -586,6 +633,7 @@ int nb_value_inferior(COLUMN* col, void* value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est inférieure à la valeur recherchée alors
                         if ((*(double *) col->data[i]) < (*(double *) value)) {
                             compteur++;
 
@@ -599,6 +647,7 @@ int nb_value_inferior(COLUMN* col, void* value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est inférieure à la valeur recherchée alors
                         if (strcmp((char *) col->data[i], (char *) value) < 0) {
                             compteur++;
                         }
@@ -642,6 +691,7 @@ int nb_value_equal(COLUMN* col, void *value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est égale à la valeur recherchée alors
                         if ((*(int *) col->data[i]) == (*(int *) value)) {
                             compteur++;
 
@@ -656,6 +706,7 @@ int nb_value_equal(COLUMN* col, void *value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est égale à la valeur recherchée alors
                         if ((*(unsigned int *) col->data[i]) == (*(unsigned int *) value)) {
                             compteur++;
 
@@ -669,6 +720,7 @@ int nb_value_equal(COLUMN* col, void *value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est égale à la valeur recherchée alors
                         if ((*(char *) col->data[i]) == (*(char *) value)) {
                             compteur++;
 
@@ -683,6 +735,7 @@ int nb_value_equal(COLUMN* col, void *value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est égale à la valeur recherchée alors
                         if ((*(float *) col->data[i]) == (*(float *) value)) {
                             compteur++;
 
@@ -696,6 +749,7 @@ int nb_value_equal(COLUMN* col, void *value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est égale à la valeur recherchée alors
                         if ((*(double *) col->data[i]) == (*(double *) value)) {
                             compteur++;
 
@@ -709,6 +763,7 @@ int nb_value_equal(COLUMN* col, void *value){
             for (int i = 0; i < col->size; i++) {
                 if(value!=NULL) {
                     if (col->data[i] != NULL) {
+                        //Si la valeur de la case est égale à la valeur recherchée alors
                         if (strcmp((char *) col->data[i], (char *) value) == 0) {
                             compteur++;
                         }
@@ -731,26 +786,20 @@ int nb_value_equal(COLUMN* col, void *value){
 
 }
 
-/**
-* @brief: Sort a column according to a given order
-* @param1: Pointer to the column to sort
-* @param2: Sort type (ASC or DESC)
-*/
-void sort(COLUMN* col, int sort_dir){
-    char je[250000];
-    if (col->valid_index == -1 ){
-        for(int i = 2; i<col->size; i++){
-            char k[250000];
-            convert_value(col, i, k, sizeof(k));
-            int j = i - 1;
-            while(j>0 && je>k){
-                convert_value(col,j,je,sizeof(j));
 
-                j--;
-            }
 
-        }
 
-    }
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+

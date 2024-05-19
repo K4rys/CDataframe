@@ -10,17 +10,27 @@
 #include <locale.h>
 
 int main() {
-    COLUMN *mycol = create_column(CHAR, "Column 1");
-    char a = 'A', c = 'C';
+    COLUMN *mycol = create_column(INT, "Column 1");
+    int a = 1; int b = 2; int c = 3; int d = 4; int e = 5;
 
-    insert_value(mycol, &a);
-
-    insert_value(mycol, NULL);
+    insert_value(mycol, &b);
 
     insert_value(mycol, &c);
 
+    insert_value(mycol, &a);
 
+    insert_value(mycol, &d);
 
+    insert_value(mycol, &e);
+
+    double x = 3.1;
+    double *ptr = &x;
+    ptr = (void*) ptr;
+
+    ENUM_TYPE type[] = {STRING,DOUBLE};
+    char* name = "C:\\Users\\natha\\CLionProjects\\CDataframe\\export.csv";
+    CDATAFRAME *cdf = load_from_csv(name,  type, 2);
+    print_cdataframe(cdf);
 
 
 
@@ -28,29 +38,5 @@ int main() {
 }
 
 
-/*char x = 3;
-    char *ptr = &x;
-    ptr = (void*) ptr;
-
-    ENUM_TYPE cdftype [] = {INT,INT,INT};
-    CDATAFRAME *cdf = create_cdataframe(cdftype, 3);
-    fill_cdataframe_user(cdf);
-    print_cdataframe(cdf);
-
-    export_cdataframe("\C:\\Users\\natha\\CLionProjects\\CDataframe\\export.csv",cdf);
-    */
-
-/*void *data[] = {
-        (int []) {1, 2, 3},
-        (char *[]) {"John", "Doe", "30"}
-};
 
 
-const int taille[] = {3, 3};*/
-
-/*ENUM_TYPE cdftype [] = {INT,INT,INT};
-    CDATAFRAME *cdf = create_cdataframe(cdftype, 3);
-    fill_cdataframe_user(cdf);
-    print_cdataframe(cdf);
-    replace_value_cdataframe(cdf,ptr,1,12);
-    print_cdataframe(cdf);*/

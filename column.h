@@ -33,21 +33,19 @@ struct column {
     ENUM_TYPE column_type;
     COL_TYPE **data; // array of pointers to stored data
     unsigned long long int *index; // array of integers
-    int valid_index;
-    int sort_dir;
 };
 typedef struct column COLUMN;
 
 COLUMN *create_column(ENUM_TYPE type, char *title);
 int insert_value(COLUMN *col, void *value);
 void delete_column(COLUMN **col);
-void convert_value(COLUMN *col, unsigned long long int i, char *str, int size);
+int convert_value(COLUMN *col, unsigned long long int i, char *str, int size);
 void print_col(COLUMN* col);
 int nb_occurence(COLUMN* col, void *value);
 void* get_value(COLUMN* col, int i);
 int nb_value_superior(COLUMN* col, void* value);
 int nb_value_inferior(COLUMN* col, void* value);
 int nb_value_equal(COLUMN* col, void *value);
-void sort(COLUMN* col, int sort_dir);
 
+char* get_value_indice(COLUMN* col,int indice,char *str);
 #endif //CDATAFRAME_COLUMNV2_H
