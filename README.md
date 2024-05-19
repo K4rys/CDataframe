@@ -3,6 +3,10 @@
 Description
 -----------
 Ce logiciel est conçu pour créer et manipuler des dataframes en langage C. 
+> [!NOTE]
+> Quand une fonction vous demande de renseigner des indices, ce sont bien les indices en langage naturel.   
+> Plus précisemment le premier indice est 1.
+
 -------------------------------------
 Nous avons fait les choix suivants :
 ------------------
@@ -11,9 +15,7 @@ Nous avons fait les choix suivants :
                                     3. Partie 3 : Facile
 Pour la partie 3 nous avons fait la section 8. "Fichier" 
 et même si elle n'est pas incluse dans la partie 3 "Facile" nous avons juger bon de le mettre quand même.
-Notre projet fonctionne correctement pour toute les fonctions avec les cas passants 
-cependant il est suceptible de
-disfonctionner si jamais les valeurs entrées ne correspondent pas aux valeurs attendues, nous n'avons pas forcément réalisé les sécurités.
+
 
 Liste des Programmes
 ---------------------
@@ -46,3 +48,33 @@ Utilisation
 Pour utiliser ces différentes fonctions, vous devez les appeler directement dans le programme principal. Notez que lorsque les fonctions attendent des pointeurs void, la valeur envoyée doit être du bon type avant d'être castée en (void*).
 
 Exemple : Si vous souhaitez ajouter un entier dans une colonne de type entier, vous ne pouvez pas envoyer un pointeur de caractère casté en pointeur void.
+
+Scénario d'utilisations
+-----------------------
+**create_cdataframe** :   
+```
+    ENUM_TYPE cdftype [] = {INT,INT};  
+    CDATAFRAME *cdf = create_cdataframe(cdftype, 2);
+```
+
+
+**fill_cdataframe_user** :   
+```
+    ENUM_TYPE cdftype [] = {INT,INT};  
+    CDATAFRAME *cdf = create_cdataframe(cdftype, 2);  
+    fill_cdataframe_user(cdf);  
+```
+
+**fill_cdataframe_hard**
+```
+    ENUM_TYPE cdftype [] = {INT,DOUBLE};
+    CDATAFRAME *cdf = create_cdataframe(cdftype, 2);
+    int int_arr[] = {1, 2, 3};
+    double double_arr[] = {1.1, 2.2, 3.3};
+    void *tab[] = {int_arr, double_arr};
+    int taille_tab[] = {3,3};
+    fill_cdataframe_hard(cdf, tab, taille_tab, 2);
+```
+
+
+
