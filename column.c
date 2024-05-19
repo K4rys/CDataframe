@@ -1,6 +1,6 @@
 //
 // Created by natha on 21/04/2024.
-//
+//c
 
 #include "column.h"
 #include <stdio.h>

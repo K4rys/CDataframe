@@ -1,6 +1,6 @@
 //
 // Created by natha on 08/05/2024.
-//
+//c
 
 #include <stdio.h>
 #include <stdlib.h>
