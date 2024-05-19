@@ -13,7 +13,7 @@ Pour la partie 3 nous avons fait la section 8. "Fichier"
 et même si elle n'est pas incluse dans la partie 3 "Facile" nous avons juger bon de le mettre quand même.
 Notre projet fonctionne correctement pour toute les fonctions avec les cas passants 
 cependant il est suceptible de
-disfonctionner si jamais les valeurs entrées ne correspondent pas aux valeurs attendues.
+disfonctionner si jamais les valeurs entrées ne correspondent pas aux valeurs attendues, nous n'avons pas forcément réalisé les sécurités.
 
 Liste des Programmes
 ---------------------
