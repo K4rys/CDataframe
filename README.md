@@ -90,7 +90,7 @@ Scénario d'utilisations
     export_cdataframe(name,cdf);
 ```
 
-**load_from_csv
+**load_from_csv**
 ```
     ENUM_TYPE type[] = {STRING,DOUBLE};
     char* name = "C:\\Users\\natha\\CLionProjects\\CDataframe\\export.csv";
